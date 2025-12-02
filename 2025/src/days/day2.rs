@@ -1,3 +1,5 @@
+use std::{ops::Div, time::Instant};
+
 pub struct IdRange {
     start: i64,
     end: i64
@@ -19,18 +21,27 @@ pub fn parse(s: String) -> Vec<IdRange> {
 
 pub fn solve(s: String, invalid_fn: &dyn Fn(&str) -> bool) -> i64 {
     let ranges = parse(s);
-
     let mut total = 0;
+    let mut iterations = 0;
 
+    let now = Instant::now();
     ranges
         .iter()
         .for_each(|range| {
             for i in range.start..=range.end {
+                iterations += 1;
                 if invalid_fn(&i.to_string()) {
                     total += i
                 }
             }
         });
+
+    let avg = now.elapsed().div(iterations);
+
+    println!("range count: {}", ranges.len());
+    println!("iteration count: {iterations}");
+    println!("avg iteration time: {avg:?}");
+    println!("total time: {:?}", now.elapsed());
 
     total
 }
@@ -50,30 +61,37 @@ mod part1 {
 }
 
 mod part2 {
-    use std::cmp::min;
+    use std::{cmp::min};
 
     pub fn is_invalid(id: &str) -> bool {
         let length = id.len();
+        if length <= 1 {
+            return false;
+        }
         let mid = length/2;
 
-        for part_amount in 1..=mid {
+        for part_length in 1..=mid {
+            if length % part_length != 0 {
+                continue;
+            }
+
             let mut start = 0;
-            let end = min(start+part_amount, length);
+            let end = min(start+part_length, length);
             let first = &id[start..end];
             let mut all_match = true;
 
             while start < length {
-                let end = min(start+part_amount, length);
+                let end = min(start+part_length, length);
                 let part = &id[start..end];
                 all_match &= part == first;
-                start += part_amount;
+                start += part_length;
             }
 
             if all_match {
                 return true;
             }
         }
-
+ 
         false
     }
 }
@@ -143,7 +161,7 @@ mod tests {
         assert_eq!(part2::is_invalid("1011"), false);
         assert_eq!(part2::is_invalid("123"), false);
 
-        // // new ones
+        // new ones
         assert_eq!(part2::is_invalid("111"), true);
         assert_eq!(part2::is_invalid("11111"), true);
         assert_eq!(part2::is_invalid("121212"), true);
