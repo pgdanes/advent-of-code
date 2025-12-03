@@ -61,6 +61,15 @@ mod part2 {
         let mut start_index = 0;
         let mut digits_needed: usize = 12;
 
+        // searches by finding the max number between 
+        // index of the last found digit
+        // and the 
+        // length of array - count of the nums needed
+        //
+        // so first is 0..len-12
+        // then first_num_index..len-11
+        // then second_num_index..len-10
+        // .. and so on
         while digits_needed > 0 {
             let end_index = v.len() - digits_needed + 1;
             let slice = &v[start_index..end_index];
