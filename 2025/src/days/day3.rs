@@ -12,14 +12,18 @@ pub fn parse(s: String) -> Vec<Vec<u32>> {
 mod part1 {
     use super::*;
 
-    pub fn largest_joltage(v: &Vec<u32>) -> u32 {
-        let (first_digit, first_index) = max_i(&v[..v.len()-1]);
+    pub fn largest_joltage(v: &Vec<u32>) -> Option<u32> {
+        let (first_digit, first_index) = max_i(&v[..v.len()-1])?;
         let second_digit = v[first_index+1..].iter().max().unwrap_or(&0);
-        first_digit * 10 + second_digit
+        Some(first_digit * 10 + second_digit)
     }
 
     /// get max element with index
-    pub fn max_i(v: &[u32]) -> (u32, usize) {
+    pub fn max_i(v: &[u32]) -> Option<(u32, usize)> {
+        if v.len() == 0 {
+            return None;
+        }
+
         let mut largest = 0;
         let mut largest_i = 0;
 
@@ -32,13 +36,13 @@ mod part1 {
                 }
             });
 
-        (largest, largest_i)
+        Some((largest, largest_i))
     }
 
     pub fn solve(s: String) -> u32 {
         parse(s)
             .iter()
-            .map(|x| largest_joltage(x))
+            .flat_map(largest_joltage)
             .sum()
     }
 }
@@ -52,17 +56,17 @@ mod tests {
     fn largest_joltage_test() {
         assert_eq!(
             part1::largest_joltage(&vec![9,8,7,6,5,4,3,2,1,1,1,1,1,1,1]),
-            98
+            Some(98)
         );
 
         assert_eq!(
             part1::largest_joltage(&vec![8,1,8,1,8,1,9,1,1,1,1,2,1,1,1]),
-            92
+            Some(92)
         );
 
         assert_eq!(
             part1::largest_joltage(&vec![2,3,4,2,3,4,2,3,4,2,3,4,2,7,8]),
-            78
+            Some(78)
         );
     }
 
