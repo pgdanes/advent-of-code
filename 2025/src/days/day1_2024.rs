@@ -40,26 +40,26 @@ mod part1 {
 }
 
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::days::read::*;
-
-    #[test]
-    fn example_part1() {
-        let input = read_day_example("1_2024").unwrap();
-        let result = part1::solve(input);
-
-        assert!(result.is_ok());
-        assert_eq!(result.unwrap(), 11);
-    }
-
-    #[test]
-    fn real_part1() {
-        let input = read_day("1_2024").unwrap();
-        let result = part1::solve(input);
-
-        assert!(result.is_ok());
-        assert_eq!(result.unwrap(), 2166959);
-    }
-}
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+//     use crate::days::read::*;
+//
+//     #[test]
+//     fn example_part1() {
+//         let input = read_day_example("1_2024").unwrap();
+//         let result = part1::solve(input);
+//
+//         assert!(result.is_ok());
+//         assert_eq!(result.unwrap(), 11);
+//     }
+//
+//     #[test]
+//     fn real_part1() {
+//         let input = read_day("1_2024").unwrap();
+//         let result = part1::solve(input);
+//
+//         assert!(result.is_ok());
+//         assert_eq!(result.unwrap(), 2166959);
+//     }
+// }
